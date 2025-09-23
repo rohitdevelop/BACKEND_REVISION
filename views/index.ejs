@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>Form Example</title>
 </head>
 <body>
-<h1> heloo kaise hai aap log</h1>
+  <h1>Submit User Form</h1>
+  <form action="/get-form-deta" method="POST">
+    <input type="text" name="name" placeholder="Enter Name" required><br><br>
+    <input type="email" name="email" placeholder="Enter Email" required><br><br>
+    <input type="number" name="age" placeholder="Enter Age"><br><br>
+    <button type="submit">Submit</button>
+  </form>
 </body>
 </html>
