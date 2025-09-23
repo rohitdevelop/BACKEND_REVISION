@@ -59,8 +59,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// Connect to DB
 connectDB();
 
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -72,17 +74,28 @@ app.get("/", (req, res) => {
 });
 
 // Save form data to DB
-app.post("/get-form-deta", async (req, res) => {
+app.post("/get-form-data", async (req, res) => {
   try {
-    console.log(req.body);
+    const { name, email, age } = req.body;
 
-    const user = new UserModel(req.body);
-    await user.save();
+    const userInformation = await UserModel.create({
+      name,
+      email,
+      age,
+    });
 
-    res.send("✅ Data received & saved in MongoDB");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("❌ Error saving data");
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      data: userInformation,
+    });
+  } catch (error) {
+    console.error("Error saving user:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error, could not save user",
+      error: error.message,
+    });
   }
 });
 
