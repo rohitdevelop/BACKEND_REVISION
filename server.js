@@ -47,17 +47,26 @@
 //1. inbuild express costome Middleware
 //2. custom Middleware
 //3. third party Middleware
-const express = require("express");
-const app = express();
-const connectDB = require("./config/db");
-const UserModel = require("./models/user");
-require("dotenv").config();
 
-// Middleware
-app.use((req, res, next) => {
-  console.log("middleware start", req.url);
-  next();
-});
+
+
+
+
+
+
+
+
+
+
+const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
+const connectDB = require("./src/config/db");
+const userRoutes = require("./src/router/userrouter");
+
+dotenv.config();
+
+const app = express();
 
 // Connect to DB
 connectDB();
@@ -67,39 +76,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
+app.set("views", path.join(__dirname, "src", "views")); 
 // Routes
-app.get("/", (req, res) => {
-  res.render("index");
-});
 
-// Save form data to DB
-app.post("/get-form-data", async (req, res) => {
-  try {
-    const { name, email, age } = req.body;
+// ✅ Setup static folder
+app.use(express.static(path.join(__dirname, "public")));
 
-    const userInformation = await UserModel.create({
-      name,
-      email,
-      age,
-    });
+app.use("/", userRoutes);
 
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      data: userInformation,
-    });
-  } catch (error) {
-    console.error("Error saving user:", error);
-    res.status(500).json({
-      success: false,
-      message: "Server error, could not save user",
-      error: error.message,
-    });
-  }
-});
-
+// Server start
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
