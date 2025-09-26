@@ -1,0 +1,6 @@
+crud opration
+
+C - creaet // how can we create a deta and push to the deta base 
+R - read // how can se read a deta find() meth0d - jo sara deta le aata hia => findOne() method - yes sirf ek hi user ka deta la sakta hai and also we          add same condisation also in that
+u - update // how can we update the deta and in that one mthod we can use for that called findOneAndUpdate() method 
+d - delete

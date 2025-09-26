@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Users</title>
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div class="container">
+    <h2>All Users</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td>
+              <a href="/edit/<%= user._id %>">✏ Edit</a> | 
+              <a href="/delete/<%= user._id %>" onclick="return confirm('Are you sure?')">🗑 Delete</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <br>
+    <a href="/">⬅ Back to Register</a>
+  </div>
+</body>
+</html>
