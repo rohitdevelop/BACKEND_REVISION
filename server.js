@@ -48,26 +48,26 @@
 //2. custom Middleware
 //3. third party Middleware
 
-
-
-
-
-
-
-
-
-
-
 const express = require("express");
 const dotenv = require("dotenv");
+const http = require("http");
 const path = require("path");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/router/userrouter");
-
-dotenv.config();
+const { Server } = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
+// socket.io
+ io.on("connection",(socket)=>{
+  socket.on("massage"(massage)=>{
+
+  })
+ })
+
+dotenv.config();
 // Connect to DB
 connectDB();
 
@@ -76,7 +76,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "src", "views")); 
+app.set("views", path.join(__dirname, "src", "views"));
 // Routes
 
 // ✅ Setup static folder
@@ -86,7 +86,6 @@ app.use("/", userRoutes);
 
 // Server start
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-

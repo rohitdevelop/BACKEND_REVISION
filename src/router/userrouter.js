@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 // Show form
 router.get("/", (req, res) => {
-  res.render("index");
+  res.render("chatapp");
 });
 
 // Handle form submission (Create)
