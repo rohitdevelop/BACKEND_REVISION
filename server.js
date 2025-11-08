@@ -60,12 +60,18 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// socket.io
- io.on("connection",(socket)=>{
-  socket.on("massage"(massage)=>{
 
-  })
- })
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("message", (data) => {
+     io.emit("message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
 
 dotenv.config();
 // Connect to DB

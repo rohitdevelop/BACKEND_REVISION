@@ -3,35 +3,124 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Chat App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 20px;
+        color: #333;
+      }
+
+      #chat {
+        flex: 1;
+        width: 90%;
+        max-width: 500px;
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .message {
+        margin: 6px 0;
+        padding: 10px 14px;
+        border-radius: 10px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
+
+      .left {
+        background: #ececec;
+        align-self: flex-start;
+      }
+
+      .right {
+        background: #007bff;
+        color: white;
+        align-self: flex-end;
+      }
+
+      #input-area {
+        width: 90%;
+        max-width: 500px;
+        display: flex;
+        gap: 10px;
+        margin: 10px 0;
+      }
+
+      input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
   </head>
   <body>
-    <h1>chatting aap</h1>
-    <button onclick="connection()">refrese connection</button>
-
-    <input type="text" placeholder="enter number" id="massage" />
-
-    <button id="send">send</button>
-
+    <h1>💬 Chat App</h1>
     <div id="chat"></div>
+
+    <div id="input-area">
+      <input id="message" placeholder="Type a message..." />
+      <button id="send">Send</button>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
-      const sendbtn = document.getElementById("send");
-      const massageInput = document.getElementById("massage");
-      const chats = document.getElementById("chat");
+      const sendBtn = document.getElementById("send");
+      const input = document.getElementById("message");
+      const chatBox = document.getElementById("chat");
 
-      socket.on("massage", (massage) => {
-        const ptag = document.createElement('p')
-        ptag.innerText = massage
-        chats.appendChild(ptag)
+      // 🔹 Random username (for demo)
+      const username = "User" + Math.floor(Math.random() * 5);
 
+      // 🔹 Jab message aaye server se
+      socket.on("message", (data) => {
+        const div = document.createElement("div");
+        div.classList.add("message");
+        div.classList.add(data.user === username ? "right" : "left");
+        div.innerText = `${data.text}`;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
       });
 
-      sendbtn.addEventListener("click", () => {
-        const message = massageInput.value;
-        massageInput.value = "";
-        socket.emit("rohit-massage", message);
+      // 🔹 Jab send button dabaye
+      sendBtn.addEventListener("click", () => {
+        const text = input.value.trim();
+        if (text === "") return;
+        socket.emit("message", { user: username, text });
+        input.value = "";
+      });
+
+      // 🔹 Enter key se bhejne ka option
+      input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendBtn.click();
       });
     </script>
   </body>
