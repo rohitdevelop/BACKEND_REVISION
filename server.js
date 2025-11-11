@@ -50,26 +50,23 @@
 
 const express = require("express");
 const dotenv = require("dotenv");
-const http = require("http");
 const path = require("path");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/router/userrouter");
-const { Server } = require("socket.io");
 
+const http = require("http");
 const app = express();
+const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
 
-
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
-
+  console.log("conetted", socket.id);
   socket.on("message", (data) => {
-     io.emit("message", data);
+    io.emit("message", data);
   });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+  socket.on("disconneted", () => {
+    console.log("disconnected", socket.id);
   });
 });
 
